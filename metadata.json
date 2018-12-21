@@ -1,26 +1,36 @@
 {
-  "name": "apettinen-xcodeclitools",
-  "version": "0.1.0",
-  "author": "Antti Pettinen, IT-Services, Tampere University of Technology",
+  "name": "call-xcode_cli_tools",
+  "version": "0.0.1",
+  "author": "Brian Call",
   "summary": "Installs Xcode Command Line Tools",
   "license": "Apache-2.0",
-  "source": "git@github.com:apettinen/puppet-xcodeclitools.git",
-  "project_page": "https://github.com/apettinen/puppet-xcodeclitools",
-  "issues_url": "antti.pettinen@tut.fi",
+  "source": "git@github.com:call/call-xcode_cli_tools.git",
+  "project_page": "https://github.com/call/call-xcode_cli_tools",
+  "issues_url": "https://github.com/call/call-xcode_cli_tools/issues",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
-    {"name":"CFPropertyList gem","version_requirement":">=2.2.5"}
+    { "name":"puppetlabs-stdlib", "version_requirement":">= 1.0.0"},
+    { "name": "CFPropertyList gem", "version_requirement": ">=2.2.5"}
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "macOS (Darwin)",
+      "operatingsystem": "Darwin",
       "operatingsystemrelease": [
         "10.9",
         "10.10",
         "10.11",
-        "10.12"
+        "10.12",
+        "10.13",
+        "10.14"
       ]
     }
   ],
-  "data_provider": null
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.7.0 < 7.0.0"
+    }
+  ],
+  "pdk-version": "1.7.1",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
+  "template-ref": "1.7.1-0-g810b982"
 }

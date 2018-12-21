@@ -1,4 +1,4 @@
-# Class: xcodeclitools
+# Class: xcode_cli_tools
 # ===========================
 #
 # Install XCode Command Line Tools. Compatible with OS X versions 10.9 - 10.11
@@ -16,7 +16,7 @@
 # --------
 #
 # @example
-#    class { 'xcodeclitools':
+#    class { 'xcode_cli_tools':
 #
 #    }
 #
@@ -28,24 +28,19 @@
 # Copyright
 # ---------
 #
-# Copyright 2016 Tampere University of Technology
-#
+# Original work Copyright (c) 2016 Tampere University of Technology
+# Modified work Copyright 2018 Brian Call
 
-class xcodeclitools (
-  String $xcode_install_script_dir = '/tmp'
-  ) {
-  validate_string($xcode_install_script_dir)
+class xcode_cli_tools (
+  String[1] $xcode_install_script_dir = '/tmp'
+) {
+  if $facts['os']['family'] != 'Darwin' {
+    fail('This module only supports macOS.')
+  } elsif $facts['os']['release']['major'] >= '15' and $facts['xcode_cli_installed'] == false {
 
-  if $::operatingsystem != 'Darwin' {
-    fail('This module is only for OS X machines')
-  }
-  elsif $::operatingsystemmajrelease >= '15' and $::xcode_cli_installed == false {
-  #if $::xcode_cli_installed == false {
-    # installing Xcode Command Line Tools from SUS specified source
-    file { 'set_installondemand':
+    file { 'set_install_on_demand':
       ensure => present,
-      path   =>
-      '/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress',
+      path   => '/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress',
       mode   => '0644',
       owner  => 'root',
       group  => 'wheel',
@@ -54,29 +49,36 @@ class xcodeclitools (
 
     file { 'xcode_cli_install_script':
       ensure => file,
-      source => 'puppet:///modules/xcodeclitools/install_xcode_cli_tools.sh',
+      source => 'puppet:///modules/xcode_cli_tools/install_xcode_cli_tools.sh',
       path   => "${xcode_install_script_dir}/install_xcode_cli_tools.sh",
       mode   => '0700',
       owner  => 'root',
       group  => 'wheel',
-      before => Exec['install_Xcode_CLI_Tools'],
+      before => Exec['install_xcode_cli_tools'],
     }
 
-    exec { 'install_Xcode_CLI_Tools':
+    exec { 'install_xcode_cli_tools':
       command => "${xcode_install_script_dir}/install_xcode_cli_tools.sh",
       require => [
-                  File['set_installondemand'],
-                  File['xcode_cli_install_script'],
-                  ],
-      before  => Xcodeclitools::Remove_helpers['remove_helper_files'],
+        File['set_install_on_demand'],
+        File['xcode_cli_install_script'],
+      ],
     }
-    xcodeclitools::remove_helpers {'remove_helper_files':
+
+    exec { 'remove_install_on_demand':
+      command => 'rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress',
+      path    => '/bin',
+      require => Exec['install_xcode_cli_tools'],
     }
-  }
-  elsif $::xcode_cli_installed == true {
-    #notice('Xcode Command Line Tools is installed')
-  }
-  else {
-    fail('This module supports only OS X versions 10.9 or above')
+
+    exec { 'remove_xcode_cli_install_script':
+      command => "rm ${xcode_install_script_dir}/install_xcode_cli_tools.sh",
+      path    => '/bin',
+      require => Exec['install_xcode_cli_tools'],
+    }
+  } elsif $facts['xcode_cli_installed'] == true {
+    notify { 'Xcode Command Line Tools is installed': }
+  } else {
+    fail('This module only supports macOS versions 10.9 or higher.')
   }
 }

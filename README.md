@@ -90,7 +90,9 @@ This module is tested with Puppet 4 and might not work on older versions.
 
 Contributions and pull requests are welcome.
 
-Copyright 2016 Tampere University of Technology
+Original work Copyright 2016 Tampere University of Technology
+
+Modified work Copyright 2018 Brian Call
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -103,3 +105,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+## Original Author
+
+Original credit for this module goes to
+[Antti Pettinen](https://github.com/apettinen) at Tampere University of Technology.
