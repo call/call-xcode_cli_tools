@@ -1,6 +1,6 @@
 {
   "name": "call-xcode_cli_tools",
-  "version": "0.0.3",
+  "version": "0.0.31",
   "author": "Brian Call",
   "summary": "Installs Xcode Command Line Tools",
   "license": "Apache-2.0",
