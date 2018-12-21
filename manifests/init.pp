@@ -66,8 +66,8 @@ class xcode_cli_tools (
     }
 
     $cleanup = [
-      'rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress',
-      "rm ${xcode_install_script_dir}/install_xcode_cli_tools.sh"
+      '/bin/rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress',
+      "/bin/rm ${xcode_install_script_dir}/install_xcode_cli_tools.sh"
     ]
 
     exec { $cleanup:
