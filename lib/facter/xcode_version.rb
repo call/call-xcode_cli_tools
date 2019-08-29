@@ -8,7 +8,7 @@ require 'facter'
 Facter.add(:xcode_version) do
   confine :kernel => 'Darwin'
   setcode do
-    if File.exists? '/Applications/Xcode/Contents/Info.plist'
+    if File.exists? '/Applications/Xcode.app/Contents/Info.plist'
       # Facter::Core::Execution.exec('/usr/bin/defaults read '/Applications/Xcode.app/Contents/Info' CFBundleShortVersionString')
       require 'CFPropertyList'
       CFPropertyList.native_types(CFPropertyList::List.new(:file => "/Applications/Xcode.app/Contents/Info.plist").value)['CFBundleShortVersionString']
