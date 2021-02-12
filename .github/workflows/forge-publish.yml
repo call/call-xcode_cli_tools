@@ -1,0 +1,22 @@
+name: Puppet Forge publish
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  pdk:
+    name: Validate, build, publish
+    runs-on: ubuntu-latest
+    container:
+      image: puppet/pdk:latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v1
+    - name: PDK validate
+      run: pdk validate puppet
+    - name: PDK build
+      run: pdk build && mv $(ls -d ./pkg/*) ./pkg/module.tar.gz
+    - name: Publish to Puppet Forge
+      uses: call/dockerfile-curl@master
+      with:
+        args: '-D- --fail --silent --show-error --request POST "https://forgeapi.puppet.com/v3/releases" -F "file=@pkg/module.tar.gz" -H "Authorization: Bearer ${{ secrets.FORGE_API_KEY }}"'
